@@ -22,6 +22,6 @@
     $dbh = null;
 
     // provide confirmation
-    echo "Your artist was saved successfully...  I think"
+    header("Location: new_artist.php");
 
 ?>
