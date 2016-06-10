@@ -1,0 +1,25 @@
+#splash {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+nav.navbar {
+    border-bottom: solid 5px #000000;
+}
+
+.nav > li {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#footer {
+    height: 20px;
+    background-color: #FFFFFF;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 30px;
+    width: 100%;
+    border-top: solid 5px #000000;
+}
