@@ -6,7 +6,7 @@
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // build statement
-    $sql = 'SELECT * FROM teams';
+    $sql = 'SELECT * FROM heroes';
 
     // prepare our SQL
     // $artists = $dbh->query( $sql );
@@ -31,6 +31,7 @@
 </head>
 <body>
 <div class="container">
+
     <!-- Create FORM -->
     <section>
         <h1 class="page-header text-center">Add New Professional Sports Team!</h1>
@@ -75,7 +76,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <h2>Team Info</h2>
+                    <h2>Hero Info</h2>
                     <hr>
                 </div>
                 <div class="row">
