@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="row text-right">
-                    <button class="btn btn-success">Add Team</button>
+                    <button class="btn btn-success">Add Hero</button>
                 </div>
             </fieldset>
         </form>
