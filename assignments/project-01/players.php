@@ -12,8 +12,6 @@
 </head>
 
 <body>
-
-
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -56,8 +54,8 @@
                     <li class="dropdown dd">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button">PLAYERS <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/players.php#add">Add Player</a></li>
-                            <li><a href="/players.php">View Players</a></li>
+                            <li><a href="#">Add Player</a></li>
+                            <li><a href="./players.php">View Players</a></li>
                         </ul>
                     </li>
                     <!-- CFL -->
@@ -85,13 +83,29 @@
     </nav>
 
     <section id="splash">
+
         <div class="container">
-            <div class="jumbotron">
-                <h1 id="opener">
-                    Welcome to the Professional Sports Database of Professionals..
-                </h1>
-            </div>
+            <h2>Contextual Classes</h2>
+            <p>Contextual classes can be used to color table rows or table cells. The classes that can be used are: .active, .success, .info, .warning, and .danger.</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="success">
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
+
 
     </section>
 
@@ -102,23 +116,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            function toggleNavbarMethod() {
-                if ($(window).width() > 768) {
-                    $('.navbar .dropdown').on('mouseover', function () {
-                        $('.dropdown-toggle', this).trigger('click');
-                    }).on('mouseout', function () {
-                        $('.dropdown-toggle', this).trigger('click').blur();
-                    });
-                } else {
-                    $('.navbar .dropdown').off('mouseover').off('mouseout');
-                }
-            }
-            toggleNavbarMethod();
-            $(window).resize(toggleNavbarMethod);
-        });
-    </script>
 </body>
 
 </html>

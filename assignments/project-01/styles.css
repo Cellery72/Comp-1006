@@ -2,6 +2,18 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    text-align: center;
+}
+
+#opener {
+    font-family: 'Black Ops One', cursive;
+}
+
+.jumbotron {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 nav.navbar {
@@ -13,13 +25,27 @@ nav.navbar {
     margin-right: 10px;
 }
 
-#footer {
+.dd {
+    font-family: 'Oswald', sans-serif;
+    font-size: 150%;
+}
+
+.dropdown {
+    padding-top: 10px;
+}
+
+footer {
     height: 20px;
-    background-color: #FFFFFF;
+    background-color: #EEEEEE;
     position: fixed;
     left: 0px;
     bottom: 0px;
     height: 30px;
     width: 100%;
     border-top: solid 5px #000000;
+    text-align: right;
+}
+
+footer > p {
+    margin-right: 50px;
 }
