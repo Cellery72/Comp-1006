@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html lang="en">
-
 <head>
     <!-- Bootstrap, Font-Awesome, Hover.css, Google Fonts, Custom Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
@@ -10,10 +9,8 @@
     <link rel="stylesheet" href="styles.css">
     <title>Sports Database</title>
 </head>
-
 <body>
-
-
+    <!-- Nav Bar -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -30,13 +27,13 @@
                     <li>
                         <a class="hvr-bounce-in" href="#"><img src="images/nhl.png" style="height:45px;width:auto;" /></a>
                     </li>
-                    <! -- NBA -->
+                    <!-- NBA -->
                     <li>
                         <a class="hvr-bounce-in" href="#">
                             <img src="images/nba.png" style="height:45px;width:auto;" />
                         </a>
                     </li>
-                    <! -- NFL -->
+                    <!-- NFL -->
                     <li>
                         <a class="hvr-bounce-in" href="#">
                             <img src="images/nfl.png" style="height:45px;width:auto;" />
@@ -46,7 +43,7 @@
                     <li class="dropdown dd">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button">TEAMS <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Add Team</a></li>
+                            <li><a href="./teams.php#modal">Add Team</a></li>
                             <li><a href="./teams.php">View Team</a></li>
                         </ul>
                     </li>
@@ -56,7 +53,7 @@
                     <li class="dropdown dd">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button">PLAYERS <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/players.php#add">Add Player</a></li>
+                            <li><a href="/players.php#">Add Player</a></li>
                             <li><a href="/players.php">View Players</a></li>
                         </ul>
                     </li>
@@ -78,12 +75,12 @@
                             <img src="images/mlb.png" style="height:auto;width:70px;" />
                         </a>
                     </li>
-
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- Main Splash Section -->
     <section id="splash">
         <div class="container">
             <div class="jumbotron">
@@ -95,6 +92,7 @@
 
     </section>
 
+    <!-- Footer -->
     <footer>
         <p>Copyright Justin Ellery 2016©</p>
     </footer>
@@ -102,23 +100,5 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            function toggleNavbarMethod() {
-                if ($(window).width() > 768) {
-                    $('.navbar .dropdown').on('mouseover', function () {
-                        $('.dropdown-toggle', this).trigger('click');
-                    }).on('mouseout', function () {
-                        $('.dropdown-toggle', this).trigger('click').blur();
-                    });
-                } else {
-                    $('.navbar .dropdown').off('mouseover').off('mouseout');
-                }
-            }
-            toggleNavbarMethod();
-            $(window).resize(toggleNavbarMethod);
-        });
-    </script>
 </body>
-
 </html>

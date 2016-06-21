@@ -12,7 +12,8 @@
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
     // build the SQL
-    $sql = 'INSERT INTO teams (name, sport, league) VALUES (:name, :sport, :league)';
+
+    $sql = 'INSERT INTO teams (team_name, sport_id, league_id) VALUES (:name, (SELECT sport_id from sports WHERE sport_name= :sport),(SELECT league_id from leagues WHERE league_name=:league))';
     $sth = $dbh->prepare($sql);
 
     // prepare our SQL
