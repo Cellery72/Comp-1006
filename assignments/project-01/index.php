@@ -102,7 +102,7 @@
 
 <!-- Footer -->
 <footer>
-    <p>Copyright Justin Ellery 2016©</p>
+    <p>Copyright Justin Ellery 2016&copy;</p>
 </footer>
 
 <!-- excessive js as per usual -->

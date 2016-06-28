@@ -1,4 +1,7 @@
 <?php
+// start session
+session_start();
+
 // connection to Azure Database
 $dbh = new PDO("mysql:host=us-cdbr-azure-southcentral-e.cloudapp.net;dbname=acsm_866e6052803773b", "bef99d16faecee", "6fed48b7");
 
@@ -27,7 +30,9 @@ $sth->execute();
 // close our connection
 $dbh = null;
 
-header("Location: teams.php");
+$_SESSION['success'] = "Team was added successfully.<br>";
+
+header("Location: confirmed.php");
 exit;
 
 

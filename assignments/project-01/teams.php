@@ -218,7 +218,7 @@ $dbh = null;
 
 <!-- Footer Div -->
 <footer>
-    <p>Copyright Justin Ellery 2016©</p>
+    <p>Copyright Justin Ellery 2016&copy;</p>
 </footer>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

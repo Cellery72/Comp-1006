@@ -1,15 +1,17 @@
 <?php
+
 // Validate Team ID and build SQL string
 if (empty($_GET['team_id'])) {  // return all players
-    $sql = 'SELECT first_name, last_name, DOB, position, t.team_name
+    $sql = 'SELECT p.first_name, p.last_name, p.DOB, p.position, t.team_name, t.team_id
 FROM players p
 INNER JOIN teams t ON p.team_id = t.team_id;';
 } else {    // return players for that team
     $selected_team = $_GET['team_id'];
-    $sql = 'SELECT first_name, last_name, DOB, position, t.team_name
+    $sql = 'SELECT p.first_name, p.last_name, p.DOB, p.position, t.team_name, t.team_id
 FROM players p
 INNER JOIN teams t ON p.team_id = t.team_id
 WHERE p.team_id=:id;';
+    $sql2 = 'SELECT * FROM teams WHERE team_id=:id';
 }
 
 // Set up DB
@@ -22,11 +24,14 @@ $players_sth = $dbh->prepare($sql);
 $players_sth->bindParam(':id', $selected_team, PDO::PARAM_INT);
 $players_sth->execute();
 
+// prepare 2nd sql
 $teams_sth = $dbh->prepare($teamsSQL);
 $teams_sth->execute();
 
+
 $players = $players_sth->fetchAll();
 $teams = $teams_sth->fetchAll();
+
 
 // count the rows
 $row_count = $players_sth->rowCount();
@@ -142,7 +147,7 @@ $dbh = null;
     <div class="container">
         <?php if ($row_count > 0): ?>
             <div class="row">
-                <h2 class="mainHeader">Players of the Team</h2>
+                <h2 class="mainHeader">Players of the  <?= $players[0]['team_name'] ?></h2>
                 <br>
             </div>
             <table class="table">
@@ -161,6 +166,7 @@ $dbh = null;
                         <td><?= $player['last_name'] ?></td>
                         <td><?= $player['DOB'] ?></td>
                         <td><?= $player['position'] ?></td>
+                        <input type="hidden" id="playerID" value="<?= $player['team_id'] ?>">
                     </tr>
                 <?php endforeach ?>
                 </tbody>
@@ -186,39 +192,44 @@ $dbh = null;
     <form action="add_player.php" method="post">
         <fieldset>
             <legend style="text-align: center;">New Player Information..</legend>
-            <br/>
-            <div class="row">
-                <!-- First Name Field -->
-                <div class="form-group col-md-6">
-                    <label for="first_name">First Name</label>
-                    <input class="form-control" type="text" name="first_name" required>
-                </div>
 
-                <!-- Last Name Field -->
-                <div class="form-group col-md-6">
-                    <label for="last_name">Last Name</label>
-                    <input class="form-control" type="text" name="last_name" required>
-                </div>
-
-                <!-- Team Dropdown-->
-                <div class="text-center col-md-8 form-group">
-                    <label for="team">Team</label>
-                    <select id="teamSelect" class="form-control show-tick" title="Select a team.."
-                            name="team" required>
-                        <?php foreach ($teams as $team): ?>
-                           <option value="<?= $team['team_id'] ?>"><?= $team['team_name'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
-
-                <!-- DOB Selection -->
-                <div class="form-group col-md-4">
-                    <label for="dob">DOB</label>
-                    <input type="text" name="dob" id="datepicker">
-                </div>
-                <br/>
+            <!-- First Name Field -->
+            <div class="form-group col-md-6">
+                <label for="first_name">First Name</label>
+                <input class="form-control" id="first_name_field" type="text" name="first_name" required>
             </div>
+
+            <!-- Last Name Field -->
+            <div class="form-group col-md-6">
+                <label for="last_name">Last Name</label>
+                <input class="form-control" id="last_name_field" type="text" name="last_name" required>
+            </div>
+
+            <!-- DOB Selection -->
+            <div class="form-group col-md-6">
+                <label for="dob">DOB</label>
+                <input type="text" class="form-control" name="dob" id="datepicker">
+            </div>
+
+            <!-- Position Field -->
+            <div class="form-group col-md-6">
+                <label for="position">Position</label>
+                <input class="form-control" id="position" type="text" name="position" required>
+            </div>
+
+            <!-- Team Dropdown-->
+            <div class="text-center col-md-12 form-group">
+                <label for="team">Team</label>
+                <select id="teamSelect" class="form-control show-tick" title="Select a team.."
+                        name="team_id" required>
+                    <?php foreach ($teams as $team): ?>
+                        <option value="<?= $team['team_id'] ?>"><?= $team['team_name'] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <br/>
             <div class="col-md-2 col-md-offset-5">
+                <input type="hidden" name="id" id="hiddenID">
                 <button class="btn btn-success">Add New Player!</button>
             </div>
             <br/>
@@ -228,7 +239,7 @@ $dbh = null;
 
 <!-- Footer Div -->
 <footer>
-    <p>Copyright Justin Ellery 2016©</p>
+    <p>Copyright Justin Ellery 2016&copy;</p>
 </footer>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -242,11 +253,12 @@ $dbh = null;
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script>
-    $(function() {
-        $( "#datepicker" ).datepicker();
+    
+    $(function () {
+        $("#datepicker").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
     });
-
-    var players = <?php echo json_encode($players_sth); ?>;
 
 </script>
 </body>
