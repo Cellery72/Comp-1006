@@ -24,12 +24,15 @@ $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
 // prepare, execute, and fetchAll
-$teams = $dbh->prepare($sql);
-$teams->bindParam(':id', $selected_league, PDO::PARAM_INT);
-$teams->execute();
+$teams_sth = $dbh->prepare($sql);
+$teams_sth->bindParam(':id', $selected_league, PDO::PARAM_INT);
+$teams_sth->execute();
+$teams = $teams_sth->fetchAll();
+$row_count = $teams_sth->rowCount();
+
 
 // count the rows
-$row_count = $teams->rowCount();
+$row_count = $teams_sth->rowCount();
 
 // close the DB connection
 $dbh = null;
@@ -52,7 +55,7 @@ $dbh = null;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.0.7/remodal.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.0.7/remodal-default-theme.min.css">
     <title>Sports Database</title>
-
+    <meta charset="UTF-8">
 </head>
 
 <body>
@@ -73,7 +76,8 @@ $dbh = null;
         <ul class="nav navbar-nav navbar-left">
             <!-- NHL -->
             <li>
-                <a class="hvr-bounce-in" href="teams.php?league_id=1"><img src="assets/images/nhl.png" style="height:45px;width:auto;"/></a>
+                <a class="hvr-bounce-in" href="teams.php?league_id=1"><img src="assets/images/nhl.png"
+                                                                           style="height:45px;width:auto;"/></a>
             </li>
 
             <!-- NBA -->
@@ -148,6 +152,8 @@ $dbh = null;
                         <th>Team Name</th>
                         <th>League</th>
                         <th>Sport</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -156,6 +162,18 @@ $dbh = null;
                             <td><a href="players.php?team_id=<?= $team['team_id'] ?>"><?= $team['team_name'] ?></a></td>
                             <td><?= $team['league_name'] ?></td>
                             <td><?= $team['sport_name'] ?></td>
+                            <td><a href="#editTeam" onclick="setProperties(<?= $team['team_id'] ?>)"
+                                   class="id-<?= $team['team_id'] ?>"><i class="fa fa-pencil"></i></a></td>
+                            <td>
+                                <form action="delete_team.php" method="post">
+                                    <input type="hidden" name="id" value="<?= $team['team_id'] ?>">
+                                    <button type="submit"
+                                            style="border: none; background: none; color: #337ab7; padding: 0; margin: 0;"
+                                            onclick="return confirm('Are you sure want to permanently delete the <?= strip_tags($team['team_name']) ?>')">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                     </tbody>
@@ -175,7 +193,7 @@ $dbh = null;
     <button data-remodal-action="close" class="remodal-close"></button>
     <form action="add_team.php" method="post">
         <fieldset>
-            <legend>New Team Information.. </legend>
+            <legend>New Team</legend>
             <br/>
             <div class="row">
 
@@ -210,6 +228,54 @@ $dbh = null;
             <br/>
             <div class="col-md-2 col-md-offset-5">
                 <button class="btn btn-success">Add Team!</button>
+            </div>
+            <br/>
+        </fieldset>
+    </form>
+</div>
+
+<!-- Modal for Edit Team Form -->
+<div class="remodal" data-remodal-id="editTeam">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <form action="update_team.php" method="post">
+        <fieldset>
+            <legend>Edit Team Information</legend>
+            <br/>
+            <div class="row">
+
+                <!-- Team Name Field -->
+                <div class="form-group col-md-12">
+                    <label for="name">Team Name</label>
+                    <input class="form-control" type="text" name="name" id="team_name" required>
+                </div>
+
+                <!-- League Dropdown-->
+                <div class="text-center col-md-6 form-group">
+                    <label for="league">League</label>
+                    <select id="dropdown" class="form-control selectpicker show-tick" title="Select a league"
+                            name="league">
+                        <option value="NHL">NHL</option>
+                        <option value="NBA">NBA</option>
+                        <option value="CFL">CFL</option>
+                        <option value="NFL">NFL</option>
+                        <option value="NLL">NLL</option>
+                        <option value="MLB">MLB</option>
+                    </select>
+
+                </div>
+
+                <!-- Read only Sport Value-->
+                <div class="text-center col-md-6 form-group">
+                    <label for="sport">Sport</label>
+                    <input class="form-control disabled" type="text" id="sports" name="sport" readonly>
+                </div>
+
+                <br/>
+            </div>
+            <br/>
+            <div class="col-md-2 col-md-offset-5">
+                <input type="hidden" name="id" id="hiddenID">
+                <button class="btn btn-success">Update Team!</button>
             </div>
             <br/>
         </fieldset>
@@ -256,8 +322,47 @@ $dbh = null;
         $('#sport').val(sport);
     });
 
-    var teams = <?php echo json_encode($teams); ?>;
-    console.log(teams);
+    // GROSS PT2
+    $('#dropdown').change(function () {
+        var leagueSelected = $('#dropdown').val();
+        switch (leagueSelected) {
+            case "NHL":
+                sport = "Hockey";
+                break;
+            case "NBA":
+                sport = "Basketball";
+                break;
+            case "CFL":
+                sport = "Football";
+                break;
+            case "NFL":
+                sport = "Football";
+                break;
+            case "NLL":
+                sport = "Lacrosse";
+                break;
+            case "MLB":
+                sport = "Baseball";
+                break;
+        }
+        $('#sports').val(sport);
+    });
+    function setProperties(id) {
+        // get PHP Array of rows
+        teams = <?php echo json_encode($teams); ?>;
+        // Iterate through the teams until we find match with id
+        for (var i = 0, len = teams.length; i < len; i++) {
+            var currentTeam = teams[i];
+            if (currentTeam.team_id == id) {
+                // Set appopriate values
+                $('#team_name').val(currentTeam.team_name);
+                $('#sports').val(currentTeam.sport_name);
+                $('#dropdown').val(currentTeam.league_name);
+                $('#dropdown').selectpicker('render');
+                $('#hiddenID').val(currentTeam.team_id);
+            }
+        }
+    }
 </script>
 </body>
 
