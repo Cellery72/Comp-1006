@@ -31,9 +31,6 @@ $teams = $teams_sth->fetchAll();
 $row_count = $teams_sth->rowCount();
 
 
-// count the rows
-$row_count = $teams_sth->rowCount();
-
 // close the DB connection
 $dbh = null;
 

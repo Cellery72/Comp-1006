@@ -7,17 +7,16 @@ FROM players p
 INNER JOIN teams t ON p.team_id = t.team_id;';
 } else {    // return players for that team
     $selected_team = $_GET['team_id'];
-    $sql = 'SELECT p.first_name, p.last_name, p.DOB, p.position, t.team_name, t.team_id
+    $sql =  'SELECT p.first_name, p.last_name, p.DOB, p.position, t.team_name, t.team_id
 FROM players p
 INNER JOIN teams t ON p.team_id = t.team_id
 WHERE p.team_id=:id;';
-    $sql2 = 'SELECT * FROM teams WHERE team_id=:id';
 }
 
 // Set up DB
 $dbh = new PDO("mysql:host=us-cdbr-azure-southcentral-e.cloudapp.net;dbname=acsm_866e6052803773b", "bef99d16faecee", "6fed48b7");
 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$teamsSQL = 'SELECT * FROM TEAMS;';
+
 
 // prepare, execute, and fetchAll
 $players_sth = $dbh->prepare($sql);
@@ -25,6 +24,7 @@ $players_sth->bindParam(':id', $selected_team, PDO::PARAM_INT);
 $players_sth->execute();
 
 // prepare 2nd sql
+$teamsSQL = 'SELECT * FROM TEAMS;';
 $teams_sth = $dbh->prepare($teamsSQL);
 $teams_sth->execute();
 
@@ -32,6 +32,11 @@ $teams_sth->execute();
 $players = $players_sth->fetchAll();
 $teams = $teams_sth->fetchAll();
 
+// Set Current Team
+foreach ($teams as $tm) {
+    if($tm['team_id']==$selected_team)
+        $ourTeam = $tm;
+}
 
 // count the rows
 $row_count = $players_sth->rowCount();
@@ -145,11 +150,15 @@ $dbh = null;
 <!-- Section for Rows of Players -->
 <section class="remodal-bg">
     <div class="container">
+        <div class="row">
+            <?php if (empty($_GET['team_id'])): ?>
+                <h2 class="mainHeader">All Players</h2>
+            <?php else: ?>
+                <h2 class="mainHeader">Players of the <?= $ourTeam['team_name'] ?></h2>
+            <?php endif ?>
+            <br>
+        </div>
         <?php if ($row_count > 0): ?>
-            <div class="row">
-                <h2 class="mainHeader">Players of the  <?= $players[0]['team_name'] ?></h2>
-                <br>
-            </div>
             <table class="table">
                 <thead>
                 <tr>
@@ -253,7 +262,7 @@ $dbh = null;
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script>
-    
+
     $(function () {
         $("#datepicker").datepicker({
             dateFormat: "yy-mm-dd"
