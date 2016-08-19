@@ -7,7 +7,7 @@ FROM players p
 INNER JOIN teams t ON p.team_id = t.team_id;';
 } else {    // return players for that team
     $selected_team = $_GET['team_id'];
-    $sql =  'SELECT p.first_name, p.last_name, p.DOB, p.position, t.team_name, t.team_id
+    $sql = 'SELECT p.first_name, p.last_name, p.DOB, p.position, t.team_name, t.team_id
 FROM players p
 INNER JOIN teams t ON p.team_id = t.team_id
 WHERE p.team_id=:id;';
@@ -34,7 +34,7 @@ $teams = $teams_sth->fetchAll();
 
 // Set Current Team
 foreach ($teams as $tm) {
-    if($tm['team_id']==$selected_team)
+    if ($tm['team_id'] == $selected_team)
         $ourTeam = $tm;
 }
 
@@ -159,27 +159,40 @@ $dbh = null;
             <br>
         </div>
         <?php if ($row_count > 0): ?>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>DOB</th>
-                    <th>Position</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($players as $player): ?>
+            <div class="row">
+                <table class="table table-hover table-bordered">
+                    <thead>
                     <tr>
-                        <td><?= $player['first_name'] ?></td>
-                        <td><?= $player['last_name'] ?></td>
-                        <td><?= $player['DOB'] ?></td>
-                        <td><?= $player['position'] ?></td>
-                        <input type="hidden" id="playerID" value="<?= $player['team_id'] ?>">
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>DOB</th>
+                        <th>Position</th>
                     </tr>
-                <?php endforeach ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($players as $player): ?>
+                        <tr>
+                            <td><?= $player['first_name'] ?></td>
+                            <td><?= $player['last_name'] ?></td>
+                            <td><?= $player['DOB'] ?></td>
+                            <td><?= $player['position'] ?></td><td><a href="#editPlayer" onclick="setProperties(<?= $player['team_id'] ?>)"
+                                                                      class="id-<?= $player['team_id'] ?>"><i class="fa fa-pencil"></i></a></td>
+                            <td>
+                                <form action="delete_team.php" method="post">
+                                    <input type="hidden" name="id" value="<?= $player['team_id'] ?>">
+                                    <button type="submit"
+                                            style="border: none; background: none; color: #337ab7; padding: 0; margin: 0;"
+                                            onclick="return confirm('Are you sure want to permanently delete the <?= strip_tags($player['team_name']) ?>?')">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <input type="hidden" id="playerID" value="<?= $player['team_id'] ?>">
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
             <div class="row">
                 <div class="alert alert-danger col-md-4 col-md-offset-4" style="text-align:center;">
@@ -188,6 +201,7 @@ $dbh = null;
                 </div>
             </div>
         <?php endif ?>
+        <br/>
         <div class="row">
             <div class="col-md-4 col-md-offset-4 text-center">
                 <a href="#addPlayer" class="btn btn-success">Add a Player!</a>

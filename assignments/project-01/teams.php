@@ -139,11 +139,11 @@ $dbh = null;
 <section class="remodal-bg">
     <div class="container">
         <div class="row">
-            <h2 class="mainHeader">Sports Teams</h2>
+            <h2 class="mainHeader">All Teams</h2>
             <br/>
             </row>
             <?php if ($row_count > 0): ?>
-                <table class="table">
+                <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
                         <th>Team Name</th>
@@ -156,7 +156,8 @@ $dbh = null;
                     <tbody>
                     <?php foreach ($teams as $team): ?>
                         <tr>
-                            <td><a href="players.php?team_id=<?= $team['team_id'] ?>"><?= $team['team_name'] ?></a></td>
+                            <td><a href="players.php?team_id=<?= $team['team_id'] ?>"><?= $team['team_name'] ?></a>
+                            </td>
                             <td><?= $team['league_name'] ?></td>
                             <td><?= $team['sport_name'] ?></td>
                             <td><a href="#editTeam" onclick="setProperties(<?= $team['team_id'] ?>)"
@@ -166,7 +167,7 @@ $dbh = null;
                                     <input type="hidden" name="id" value="<?= $team['team_id'] ?>">
                                     <button type="submit"
                                             style="border: none; background: none; color: #337ab7; padding: 0; margin: 0;"
-                                            onclick="return confirm('Are you sure want to permanently delete the <?= strip_tags($team['team_name']) ?>')">
+                                            onclick="return confirm('Are you sure want to permanently delete the <?= strip_tags($team['team_name']) ?>?')">
                                         <i class="fa fa-remove"></i>
                                     </button>
                                 </form>
